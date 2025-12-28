@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Performance Predictor</title>
+</head>
+<body>
+    <h2>Student Performance Prediction</h2>
+
+    <form method="POST">
+        <label>Study Time (1–4):</label><br>
+        <input type="number" name="studytime" required><br><br>
+
+        <label>Past Failures (0–3):</label><br>
+        <input type="number" name="failures" required><br><br>
+
+        <label>Absences:</label><br>
+        <input type="number" name="absences" required><br><br>
+
+        <label>Health (1–5):</label><br>
+        <input type="number" name="health" required><br><br>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if prediction is not none %}
+        <h3>
+            Result:
+            {% if prediction == 1 %}
+                ✅ PASS
+            {% else %}
+                ❌ FAIL
+            {% endif %}
+        </h3>
+    {% endif %}
+</body>
+</html>
