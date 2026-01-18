@@ -1,30 +1,17 @@
 import pandas as pd
 import joblib
-
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-
-#  dataset
+# Load dataset
 df = pd.read_excel("data/student.xlsx")
 
-# 2. Create target variable (Pass / Fail)
-df["pass"] = df["G3"].apply(lambda x: 1 if x >= 10 else 0)
+# Use ONLY these 4 features
+X = df[["studytime", "failures", "absences", "health"]]
 
-# Drop unnecessary columns
-df = df.drop(["G3"], axis=1)
-
-# Encode categorical features
-for column in df.columns:
-    if df[column].dtype == "object":
-        le = LabelEncoder()
-        df[column] = le.fit_transform(df[column])
-
-# Split features and target
-X = df.drop("pass", axis=1)
-y = df["pass"]
+# Target variable
+y = df["G3"].apply(lambda x: 1 if x >= 10 else 0)
 
 # Train-test split
 X_train, X_test, y_train, y_test = train_test_split(
@@ -35,13 +22,10 @@ X_train, X_test, y_train, y_test = train_test_split(
 model = LogisticRegression(max_iter=1000)
 model.fit(X_train, y_train)
 
-# Evaluate model
-y_pred = model.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
+# Accuracy
+accuracy = accuracy_score(y_test, model.predict(X_test))
+print("Model Accuracy:", accuracy)
 
-print(f"Model Accuracy: {accuracy:.2f}")
-
-# Save model
+# Save model (OVERWRITES old model)
 joblib.dump(model, "student_model.pkl")
-
-print("Model trained and saved successfully.")
+print("New model saved successfully")
